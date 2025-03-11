@@ -55,4 +55,27 @@ public class Study {
 
         return study;
     }
+
+    // 비즈니스 로직 //
+    /**
+     * 스터디 인원수 증가 ( 신청한 사람들 중에 승인된 사람)
+     */
+    public void addCurrentMember(int count) {
+        if(currentMembers >= maxMembers-1) {
+            throw new IllegalStateException("스터디 내의 인원수가 다 찼습니다.");
+        }
+        currentMembers += count;
+    }
+
+    /**
+     * 스터디 인원수 감소 ( 스터디 내의 사람 중 나간사람, 회원 탈퇴한 사람)
+     */
+    public void remove(int count) {
+        int restMembers = currentMembers - count;
+        if(restMembers < 1){
+            throw new IllegalStateException("스터디의 인원은 최소 1명입니다.");
+        }
+        currentMembers = restMembers;
+    }
+
 }
