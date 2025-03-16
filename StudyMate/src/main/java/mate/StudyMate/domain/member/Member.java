@@ -65,6 +65,7 @@ public class Member {
         member.status = MemberStatus.ACTIVE;
         member.createdAt = LocalDateTime.now();
         member.emailVerified = false;
+        member.phoneNumber = phoneNumber;
 
         return member;
     }
