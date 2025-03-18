@@ -83,6 +83,9 @@ local.properties
 
 # Generated files
 .idea/**/contentModel.xml
+.idea/
+src/main/resources/application.properties
+src/test/resources/application.properties
 
 # Sensitive or high-churn files
 .idea/**/dataSources/
