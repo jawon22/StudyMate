@@ -25,10 +25,10 @@ public class FileEntity {
     private FileType type; // 파일 용도
 
     @Column(nullable = false)
-    private String url; // 저장된 파일 경로
+    private String filename; // 사용자가 업로드한 원본 파일명
 
-    @Column(nullable = false)
-    private String filename;
+    @Column(nullable = false, unique = true)
+    private String storeFileName; // db에 저장되는 파일명(중복방지)
 
     @Column(name = "file_size", nullable = false)
     private Long fileSize;
@@ -41,11 +41,12 @@ public class FileEntity {
 
 
     //생성자
-    public FileEntity(Long relatedId, FileType type, String url, String filename, Long fileSize, String fileType) {
+    public FileEntity(Long relatedId, FileType type, String filename,
+                                    String storeFileName, Long fileSize, String fileType) {
         this.relatedId = relatedId;
         this.type = type;
-        this.url = url;
         this.filename = filename;
+        this.storeFileName = storeFileName;
         this.fileSize = fileSize;
         this.fileType = fileType;
         this.uploadedAt = LocalDateTime.now();
