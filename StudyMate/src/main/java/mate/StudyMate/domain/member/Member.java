@@ -78,6 +78,11 @@ public class Member {
         this.updatedAt = LocalDateTime.now();
     }
 
+    // 회원 비밀번호 변경
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
 
     // 회원 탈퇴 ( 계정 비활성화)
     public void deleteMember() {

@@ -29,6 +29,19 @@ public class MemberService {
         return newMember.getId();
     }
 
+    @Transactional
+    public void changePassword(Long memberId, String oldPassword, String newPassword) {
+        Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        if (!passwordEncoder.matches(oldPassword, findMember.getPassword())) {
+            throw new IllegalArgumentException("입력한 비밀번호가 동일하지 않습니다.");
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        findMember.changePassword(encodedNewPassword);
+    }
+
     private void validateDuplicateMember(Member member) {
         List<Member> findMembersByName = memberRepository.findByName(member.getName());
         Optional<Member> findMembersByEmail = memberRepository.findByEmail(member.getEmail());

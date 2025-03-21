@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,8 @@ public class MemberServiceTest {
     MemberRepository memberRepository;
     @Autowired
     MemberService memberService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Test
     public void 회원가입() {
@@ -55,4 +58,22 @@ public class MemberServiceTest {
         // then
         Assertions.assertThrows(IllegalStateException.class, () -> memberService.join(member2));
     }
+
+    @Test
+    public void 회원_비밀번호_변경() {
+        // given
+        Member member = Member.createMember("user", "password1", "test@email.com", "010-1231-6234");
+        Long joinId = memberService.join(member);
+
+        String newPassword = "newPassword"; // 새 비밀번호
+
+        // when
+        memberService.changePassword(joinId,"password1",newPassword);
+        Member changeMember = memberRepository.findById(joinId).get();
+
+        // then
+        assertThat(!passwordEncoder.matches(newPassword,changeMember.getPassword()));
+    }
+
+
 }
