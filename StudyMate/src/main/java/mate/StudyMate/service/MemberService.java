@@ -1,6 +1,7 @@
 package mate.StudyMate.service;
 
 import lombok.RequiredArgsConstructor;
+import mate.StudyMate.controller.DeleteMemberForm;
 import mate.StudyMate.domain.file.FileType;
 import mate.StudyMate.domain.member.Member;
 import mate.StudyMate.repository.MemberRepository;
@@ -59,6 +60,17 @@ public class MemberService {
         fileService.deleteFile(memberId, FileType.PROFILE);
 
         fileService.saveFile(memberId, FileType.PROFILE, multipartFile);
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId, DeleteMemberForm form) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        if (passwordEncoder.matches(form.getPassword(), member.getPassword())
+                && memberRepository.findByEmail(form.getEmail()).isPresent()) {
+            member.deleteMember();
+        }
     }
 
     private void validateDuplicateMember(Member member) {
