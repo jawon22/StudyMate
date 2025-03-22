@@ -2,13 +2,19 @@ package mate.StudyMate.integrationTest;
 
 import lombok.extern.slf4j.Slf4j;
 import mate.StudyMate.StudyMateApplication;
+import mate.StudyMate.domain.file.FileEntity;
+import mate.StudyMate.domain.file.FileType;
 import mate.StudyMate.domain.member.Member;
+import mate.StudyMate.domain.member.Role;
+import mate.StudyMate.repository.FileRepository;
 import mate.StudyMate.repository.MemberRepository;
+import mate.StudyMate.service.FileService;
 import mate.StudyMate.service.MemberService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,6 +36,13 @@ public class MemberServiceTest {
     MemberService memberService;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    FileService fileService;
+    @Autowired
+    FileRepository fileRepository;
+
+    @Value("${file.dir}")
+    private String fileDir;
 
     @Test
     public void 회원가입() {
@@ -75,5 +88,7 @@ public class MemberServiceTest {
         assertThat(!passwordEncoder.matches(newPassword,changeMember.getPassword()));
     }
 
-
+/*    @Test
+    void 프로필_이미지_변경() throws IOException {
+    }*/
 }
