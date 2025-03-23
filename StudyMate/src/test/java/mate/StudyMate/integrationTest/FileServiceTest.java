@@ -61,26 +61,23 @@ public class FileServiceTest {
         assertEquals(1024L,file.getFileSize());
     }
 
-/*
     @Test
     void 파일삭제() throws IOException {
         // given
         FileEntity realFile = new FileEntity(1L, FileType.PROFILE, "test.jpg", "randomUUID.jpg", 1024L, "image/jpeg");
-        when(fileRepository.save(any(FileEntity.class))).thenReturn(realFile);
         when(fileRepository.findByRelatedIdAndType(1L, FileType.PROFILE)).thenReturn(Optional.of(realFile));
 
-        File mockFile = mock(File.class);
-        when(mockFile.exists()).thenReturn(true);
-        when(mockFile.delete()).thenReturn(true);
+        // 실제 파일을 생성
+        File physicalFile = new File(fileService.getFullPath("randomUUID.jpg"));
+        physicalFile.createNewFile();  // 파일 생성
 
         // when
-        fileService.deleteFile(1L,FileType.PROFILE);
+        fileService.deleteFile(1L, FileType.PROFILE);
 
         // then
-        verify(fileRepository,times(1)).delete(realFile); // db에서 삭제가 호출되었는지 확인
-        verify(mockFile, times(1)).delete(); // 실제 파일 삭제가 호출되었는지 확인
+        assertFalse(physicalFile.exists()); // 실제 파일이 삭제되었는지 확인
+        verify(fileRepository, times(1)).delete(realFile); // DB 삭제 확인
     }
-*/
 
     @Test
     void 파일경로_확인() {
