@@ -2,9 +2,11 @@ package mate.StudyMate.integrationTest;
 
 import lombok.extern.slf4j.Slf4j;
 import mate.StudyMate.StudyMateApplication;
+import mate.StudyMate.controller.DeleteMemberForm;
 import mate.StudyMate.domain.file.FileEntity;
 import mate.StudyMate.domain.file.FileType;
 import mate.StudyMate.domain.member.Member;
+import mate.StudyMate.domain.member.MemberStatus;
 import mate.StudyMate.domain.member.Role;
 import mate.StudyMate.repository.FileRepository;
 import mate.StudyMate.repository.MemberRepository;
@@ -86,6 +88,26 @@ public class MemberServiceTest {
 
         // then
         assertThat(!passwordEncoder.matches(newPassword,changeMember.getPassword()));
+    }
+
+    @Test
+    public void 회원탈퇴() {
+        // given
+        Member member = Member.createMember("user", "password1", "test@email.com", "010-1231-6234");
+        Long joinId = memberService.join(member);
+
+        Member findMember = memberRepository.findById(joinId)
+                    .orElseThrow(() -> new IllegalArgumentException("회원 없음"));
+
+        DeleteMemberForm form = new DeleteMemberForm();
+        form.setName("user");
+        form.setPassword("password1");
+        form.setEmail("test@email.com");
+        // when
+        memberService.deleteMember(findMember.getId(),form);
+
+        // then
+        assertThat(findMember.getStatus()).isEqualTo(MemberStatus.INACTIVE);
     }
 
 /*    @Test

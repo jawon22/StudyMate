@@ -68,7 +68,7 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         if (passwordEncoder.matches(form.getPassword(), member.getPassword())
-                && memberRepository.findByEmail(form.getEmail()).isPresent()) {
+                && member.getEmail().equals(form.getEmail())) {
             member.deleteMember();
         }
     }
