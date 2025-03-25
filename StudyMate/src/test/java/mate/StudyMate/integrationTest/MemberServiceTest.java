@@ -1,5 +1,6 @@
 package mate.StudyMate.integrationTest;
 
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import mate.StudyMate.StudyMateApplication;
 import mate.StudyMate.controller.DeleteMemberForm;
@@ -93,7 +94,7 @@ public class MemberServiceTest {
         memberService.join(member);
 
         // then
-        Assertions.assertThrows(IllegalStateException.class, () -> memberService.join(member2));
+        Assertions.assertThrows(IllegalStateException.class, () -> memberService.validateDuplicateMember(member2));
     }
 
     @Test

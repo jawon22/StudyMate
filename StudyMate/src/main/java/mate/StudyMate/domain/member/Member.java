@@ -70,6 +70,11 @@ public class Member {
         return member;
     }
 
+    // 이메일 인증시 업데이트
+    public void verifiedEmail() {
+        this.emailVerified = true;
+    }
+
     // 회원 정보 업데이트
     public void updateMember(String name, String profileImage, String phoneNumber) {
         this.name = name;

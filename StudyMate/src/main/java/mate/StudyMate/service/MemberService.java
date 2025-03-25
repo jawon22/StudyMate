@@ -22,18 +22,29 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder  passwordEncoder;
     private final FileService fileService;
+    private final MailService mailService;
 
     @Transactional
-    public Long join(Member member) {  //회원가입
-        validateDuplicateMember(member); // 중복 회원 검증 로직
+    public void sendEmailVerify(Member member) {
+        validateDuplicateMember(member); // 회원 중복 검증
+        mailService.sendVerifyEmail(member.getEmail()); // 이메일 인증 코드 전송
+    }
+
+    /**
+     * 회원가입 (이메일 인증 성공 후 진행)
+     */
+    @Transactional
+    public Long join(Member member) {
         String encodedPassword = passwordEncoder.encode(member.getPassword()); // 비번 암호화
 
         Member newMember = Member.createMember(member.getName(), encodedPassword, member.getEmail(), member.getPhoneNumber());
+        newMember.verifiedEmail();
 
         memberRepository.save(newMember);
         return newMember.getId();
     }
 
+    /** 회원 정보수정 (비밀번호 변경) */
     @Transactional
     public void changePassword(Long memberId, String oldPassword, String newPassword) {
         Member findMember = memberRepository.findById(memberId)
@@ -47,14 +58,17 @@ public class MemberService {
         findMember.changePassword(encodedNewPassword);
     }
 
+    /**
+     * 회원 프로필 변경
+     */
     @Transactional
-    public void changeProfile(Long memberId, MultipartFile multipartFile) throws IOException { // 회원 프로필 변경
+    public void changeProfile(Long memberId, MultipartFile multipartFile) throws IOException {
         // 기존 프로필 이미지 삭제
         if (multipartFile.isEmpty()) {
             throw new IllegalArgumentException("업로드된 파일이 없습니다.");
         }
 
-        Member member = memberRepository.findById(memberId)
+        memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         fileService.deleteFile(memberId, FileType.PROFILE);
@@ -73,11 +87,11 @@ public class MemberService {
         }
     }
 
-    private void validateDuplicateMember(Member member) {
+    public void validateDuplicateMember(Member member) {
         List<Member> findMembersByName = memberRepository.findByName(member.getName());
         Optional<Member> findMembersByEmail = memberRepository.findByEmail(member.getEmail());
 
-        if (!findMembersByName.isEmpty() && findMembersByEmail.isPresent()) {
+        if (!findMembersByName.isEmpty() || findMembersByEmail.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
