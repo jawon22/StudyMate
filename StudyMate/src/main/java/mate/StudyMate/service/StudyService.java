@@ -8,8 +8,11 @@ import mate.StudyMate.domain.study.StudyRole;
 import mate.StudyMate.domain.study.StudyStatus;
 import mate.StudyMate.repository.MemberRepository;
 import mate.StudyMate.repository.StudyRepository;
+import mate.StudyMate.repository.StudySearchCond;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -86,12 +89,12 @@ public class StudyService {
     }
 
     /**
-     * 스터디 전체 조회 (필터링: 공개/비공개, 상태)
+     * 스터디 동적조회 (필터링: 이름, 공개/비공개, 상태)
      */
+    public List<Study> findAll(StudySearchCond cond) {
+        return studyRepository.searchAll(cond);
+    }
 
-    /**
-     * 특정 스터디 상세 조회 ( 위의 메서드랑 같이 동적으로 해야하나?)
-     */
 
     /**
      * 스터디 참가
