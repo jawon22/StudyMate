@@ -109,11 +109,11 @@ public class StudyService {
         if (!study.getStatus().equals(StudyStatus.RECRUITING)) {
             throw new IllegalStateException("스터디 모집중이 아닙니다.");
         }
-        if (study.getCurrentMembers() >= study.getMaxMembers()) {
-            throw new IllegalStateException("스터디 정원이 초과되었습니다.");
-        }
         if (isAlreadyJoined(memberId, study)) {
             throw new IllegalStateException("스터디에 참가한 회원입니다.");
+        }
+        if (study.getCurrentMembers() >= study.getMaxMembers()) {
+            throw new IllegalStateException("스터디 정원이 초과되었습니다.");
         }
 
         study.getMembers().add(StudyMember.createMember(study, existMember, StudyRole.MEMBER));

@@ -86,7 +86,7 @@ public class Study {
      * 스터디 인원수 증가 (신청한 사람들 중에 승인된 사람)
      */
     public void addCurrentMember(int count) {
-        if(currentMembers >= maxMembers-1) {
+        if(currentMembers >= maxMembers) {
             throw new IllegalStateException("스터디 내의 인원수가 다 찼습니다.");
         }
         currentMembers += count;
