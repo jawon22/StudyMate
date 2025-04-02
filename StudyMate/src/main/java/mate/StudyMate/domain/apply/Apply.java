@@ -40,10 +40,13 @@ public class Apply {
 
 
     // 신청 생성 메서드
-    public Apply(Member member, Study study) {
-        this.member = member;
-        this.study = study;
-        this.createdAt = LocalDateTime.now();
+    public static Apply createApply(Member member, Study study) {
+        Apply apply = new Apply();
+        apply.member = member;
+        apply.study = study;
+        apply.status = ApplyStatus.PENDING;
+        apply.createdAt = LocalDateTime.now();
+        return apply;
     }
 
     // 비즈니스 메서드
@@ -52,8 +55,5 @@ public class Apply {
     }
     public void reject() { // 거절 상태 변경
         this.status = ApplyStatus.REJECTED;
-    }
-    public void cancel() { // 취소 상태 변경
-        this.status = ApplyStatus.CANCELED;
     }
 }

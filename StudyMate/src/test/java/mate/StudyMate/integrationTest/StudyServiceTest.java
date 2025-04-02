@@ -1,7 +1,7 @@
 package mate.StudyMate.integrationTest;
 
 import lombok.extern.slf4j.Slf4j;
-import mate.StudyMate.config.TestQueryDslConfig;
+import mate.StudyMate.config.QueryDslConfig;
 import mate.StudyMate.domain.member.Member;
 import mate.StudyMate.domain.study.Study;
 import mate.StudyMate.domain.study.StudyStatus;
@@ -22,7 +22,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@Import(TestQueryDslConfig.class)
+@Import(QueryDslConfig.class)
 @SpringBootTest
 @Transactional
 @Slf4j

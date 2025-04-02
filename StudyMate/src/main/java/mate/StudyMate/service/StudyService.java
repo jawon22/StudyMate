@@ -106,9 +106,6 @@ public class StudyService {
         Member existMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
-        if (!study.getStatus().equals(StudyStatus.RECRUITING)) {
-            throw new IllegalStateException("스터디 모집중이 아닙니다.");
-        }
         if (isAlreadyJoined(memberId, study)) {
             throw new IllegalStateException("스터디에 참가한 회원입니다.");
         }
