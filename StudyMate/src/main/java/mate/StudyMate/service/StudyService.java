@@ -44,13 +44,14 @@ public class StudyService {
      * 스터디 수정 (이름, 설명, 최대 인원 변경) - 관리자만 가능
      */
     @Transactional
-    public void updateStudy(Long studyId, Long adminId, String name, String description, int maxMembers) {
+    public void updateStudy(Long studyId, Long adminId, String name, String description, int maxMembers, StudyStatus status) {
         Study findStudy = validationExistStudyAndStudyOwner(studyId, adminId);
         if(maxMembers <= 1) {
             throw new IllegalStateException("인원 수는 최소 2명 이상이어야 합니다.");
         }
 
         findStudy.update(name, description, maxMembers);
+        findStudy.changeStatus(status);
     }
 
     /**

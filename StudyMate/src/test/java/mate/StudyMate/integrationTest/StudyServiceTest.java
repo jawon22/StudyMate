@@ -239,12 +239,12 @@ class StudyServiceTest {
         studyService.joinStudy(studyId, member2.getId());
 
         // when
-        studyService.updateStudy(studyId, member1.getId(), "Study","몰라",2);
+        studyService.updateStudy(studyId, member1.getId(), "Study","몰라",2, StudyStatus.RECRUITING);
 
         // then
         Study findStudy = studyRepository.findById(studyId).orElseThrow();
         assertThat(findStudy.getName()).isEqualTo("Study");
-        assertThatThrownBy(() -> studyService.updateStudy(studyId, member2.getId(), "Java", "차근차근해요", 2))
+        assertThatThrownBy(() -> studyService.updateStudy(studyId, member2.getId(), "Java", "차근차근해요", 2, StudyStatus.CLOSED))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("해당 작업은 스터디 관리자만 수행할 수 있습니다.");
     }
@@ -258,10 +258,10 @@ class StudyServiceTest {
         Long studyId = studyService.createStudy(member1.getId(), "Java Study", "스터디 설명", false, 2);
 
         // when
-        studyService.updateStudy(studyId, member1.getId(), "Java", "설명", 2);
+        studyService.updateStudy(studyId, member1.getId(), "Java", "설명", 2, StudyStatus.RECRUITING);
 
         // then
-        assertThatThrownBy(() -> studyService.updateStudy(studyId, member1.getId(), "Java", "설명", 1))
+        assertThatThrownBy(() -> studyService.updateStudy(studyId, member1.getId(), "Java", "설명", 1, StudyStatus.RECRUITING))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("인원 수는 최소 2명 이상이어야 합니다.");
     }
