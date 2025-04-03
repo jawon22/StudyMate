@@ -102,4 +102,11 @@ public class Study {
         }
         currentMembers = restMembers;
     }
+
+    /**
+     * 스터디 상태 변경
+     */
+    public void changeStatus(StudyStatus status) {
+        this.status = status;
+    }
 }

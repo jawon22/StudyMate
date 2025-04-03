@@ -37,6 +37,9 @@ public class ApplyService {
         if (!study.getStatus().equals(StudyStatus.RECRUITING)) {
             throw new IllegalStateException("스터디 모집중이 아닙니다.");
         }
+        if (study.getAdmin().getId().equals(memberId)) {
+            throw new IllegalStateException("스터디장은 신청할 수 없습니다.");
+        }
         if (applyRepository.existsByMemberAndStudy(member, study)) {
             throw new IllegalStateException("이미 신청한 스터디입니다.");
         }
