@@ -26,7 +26,9 @@ public class MemberService {
 
     @Transactional
     public void sendEmailVerify(Member member) {
-        validateDuplicateMember(member); // 회원 중복 검증
+        if (!memberRepository.findByEmail(member.getEmail()).isEmpty()) {
+            throw new IllegalStateException("이미 사용중인 이메일입니다.");
+        }
         mailService.sendVerifyEmail(member.getEmail()); // 이메일 인증 코드 전송
     }
 
@@ -35,6 +37,7 @@ public class MemberService {
      */
     @Transactional
     public Long join(Member member) {
+        validateDuplicateMember(member); // 회원 중복 검증
         String encodedPassword = passwordEncoder.encode(member.getPassword()); // 비번 암호화
 
         Member newMember = Member.createMember(member.getName(), encodedPassword, member.getEmail(), member.getPhoneNumber());

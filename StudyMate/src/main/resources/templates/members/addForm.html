@@ -50,6 +50,18 @@
                 <div class="field-error" th:errors="*{email}"/>
             </div>
 
+            <div class="row mt-3 align-items-center">
+                <div class="col-7">
+                    <label for="inputCode">인증 코드</label>
+                    <input type="text" id="inputCode" th:field="*{inputCode}" class="form-control"
+                           th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{inputCode}"/>
+                </div>
+                <div class="col-5 mt-4">
+                    <button type="button" class="btn btn-outline-secondary w-100" onclick="sendCode()">인증 코드 전송</button>
+                </div>
+            </div>
+
             <div>
                 <label for="phoneNumber">핸드폰 번호</label>
                 <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control"
@@ -74,4 +86,38 @@
         </form>
     </div>
 </body>
+
+<script>
+    function sendCode(){
+        const email = document.getElementById('email').value;
+        const name = document.getElementById('name').value;
+
+        if (!email || !name) {
+            alert("이메일과 아이디를 먼저 입력해주세요.");
+            return;
+        }
+
+        fetch('/members/send-code',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                email: email,
+                name: name
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("인증 코드가 이메일로 전송되었습니다.");
+            } else {
+                return response.text().then(text => { throw new Error(text); });
+            }
+        })
+        .catch(err => {
+            alert("인증 코드 전송 실패: " + err.message);
+        });
+    }
+</script>
+
 </html>
